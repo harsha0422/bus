@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Availability</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        .bus-search, .bus-results {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        select, input[type="date"], input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .bus-results {
+            margin-top: 30px;
+        }
+        .bus-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .bus-info p {
+            margin: 5px 0;
+        }
+        .bus-info {
+            flex-grow: 1;
+        }
+        .bus-item:last-child {
+            border-bottom: none;
+        }
+        @media only screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Find Available Buses</h2>
+        
+        <!-- Bus Search Form -->
+        <div class="bus-search">
+            <form id="busSearchForm">
+                <label for="from">From:</label>
+                <select name="from" id="from" required>
+                    <option value="">Select Starting Point</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="City B">City B</option>
+                </select>
+
+                <label for="to">To:</label>
+                <select name="to" id="to" required>
+                    <option value="">Select Destination</option>
+                    <option value="Kadapa">Kadapa</option>
+                    <option value="City D">City D</option>
+                </select>
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+
+                <label for="time">Time (optional):</label>
+                <input type="time" id="time" name="time">
+
+                <button type="submit">Search Buses</button>
+            </form>
+        </div>
+
+        <!-- Bus Availability Results -->
+        <div class="bus-results" id="busResults">
+            <h3>Available Buses</h3>
+            <div id="busList"></div>
+        </div>
+    </div>
+    <a href="index.html">
+<button>goto home</button>
+</a>
+    <script>
+        document.getElementById('busSearchForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const from = document.getElementById('from').value;
+            const to = document.getElementById('to').value;
+            const date = document.getElementById('date').value;
+
+            // Simulate fetching available buses
+            const availableBuses = [
+                { operator: 'Bus Operator 1', type: 'AC Sleeper', departure: '8:00 AM', arrival: '12:00 PM', seats: 20, fare: 25 },
+                { operator: 'Bus Operator 2', type: 'Non-AC Seater', departure: '9:00 AM', arrival: '1:00 PM', seats: 15, fare: 18 },
+            ];
+
+            // Filter buses based on selected values (dummy filtering for demo)
+            const filteredBuses = availableBuses.filter(bus => {
+                return true; // Currently returning all buses
+            });
+
+            // Display the results
+            const busList = document.getElementById('busList');
+            busList.innerHTML = ''; // Clear previous results
+
+            if (filteredBuses.length > 0) {
+                filteredBuses.forEach(bus => {
+                    busList.innerHTML += `
+                        <div class="bus-item">
+                            <div class="bus-info">
+                                <p><strong>Operator:</strong> ${bus.operator}</p>
+                                <p><strong>Type:</strong> ${bus.type}</p>
+                                <p><strong>Departure:</strong> ${bus.departure}</p>
+                                <p><strong>Arrival:</strong> ${bus.arrival}</p>
+                                <p><strong>Seats Available:</strong> ${bus.seats}</p>
+                                <p><strong>Fare:</strong> $${bus.fare}</p>
+                            </div>
+                            <button class="select-btn">Select</button>
+                        </div>
+                    `;
+                });
+
+                // Add event listeners to the select buttons
+                const selectButtons = document.querySelectorAll('.select-btn');
+                selectButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const busInfo = button.parentElement.querySelector('.bus-info').innerText;
+                        const confirmation = confirm(`You selected:\n${busInfo}\n\nDo you want to confirm this ticket?`);
+
+                        if (confirmation) {
+                            alert("Ticket confirmed!");
+                            // You can add code here to proceed with the booking
+                        } else {
+                            alert("Ticket selection canceled.");
+                        }
+                    });
+                });
+            } else {
+                busList.innerHTML = '<p>No buses available for the selected route and date.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
